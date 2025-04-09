@@ -1,42 +1,41 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+// App.test.js
+import { render, screen, fireEvent } from '@testing-library/react';
+import App from './App';
 
-const TodoApp = () => {
-    const [todos, setTodos] = useState([]);
-    const [newTodo, setNewTodo] = useState('');
+test('renders the TodoApp component and allows adding a task', () => {
+    render(<App />);
 
-    const addTodo = () => {
-        if (newTodo) {
-            setTodos([...todos, newTodo]);
-            setNewTodo('');
-        }
-    };
+    // Dit controleer of de titel correct wordt weergegeven
+    expect(screen.getByText("Maëva's To-Do List")).toBeInTheDocument();
 
-    const removeTodo = (index) => {
-        setTodos(todos.filter((_, i) => i !== index));
-    };
+    // Dit voeg een taak toe
+    const input = screen.getByPlaceholderText('Voeg een taak toe');
+    const addButton = screen.getByText('Toevoegen');
 
-    return (
-        <div className="todo-app">
-            <h1>Maëva's To-Do List</h1>
-            <input
-                type="text"
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-                placeholder="Voeg een taak toe"
-            />
-            <button onClick={addTodo}>Toevoegen</button>
-            <ul>
-                {todos.map((todo, index) => (
-                    <li key={index}>
-                        {todo} <button onClick={() => removeTodo(index)}>Verwijderen</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
+    fireEvent.change(input, { target: { value: 'Nieuwe taak' } });
+    fireEvent.click(addButton);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<TodoApp />);
+    // Dit controleer of de taak in de lijst staat
+    expect(screen.getByText('Nieuwe taak')).toBeInTheDocument();
+});
+
+test('removes a todo item', () => {
+    render(<App />);
+
+    // Dit voeg een taak toe
+    const input = screen.getByPlaceholderText('Voeg een taak toe');
+    const addButton = screen.getByText('Toevoegen');
+
+    fireEvent.change(input, { target: { value: 'Te verwijderen taak' } });
+    fireEvent.click(addButton);
+
+    // Dit controleer of de taak in de lijst staat
+    expect(screen.getByText('Te verwijderen taak')).toBeInTheDocument();
+
+    // Dit verwijder de taak
+    const removeButton = screen.getByText('Verwijderen');
+    fireEvent.click(removeButton);
+
+    // Dit controleer of de taak is verwijderd
+    expect(screen.queryByText('Te verwijderen taak')).not.toBeInTheDocument();
+});
