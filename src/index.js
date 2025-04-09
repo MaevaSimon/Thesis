@@ -1,42 +1,14 @@
-import React, { useState } from 'react';
+// index.js
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import App from './App'; // Zorg ervoor dat App wordt geïmporteerd
 
-const TodoApp = () => {
-    const [todos, setTodos] = useState([]);
-    const [newTodo, setNewTodo] = useState('');
-
-    const addTodo = () => {
-        if (newTodo) {
-            setTodos([...todos, newTodo]);
-            setNewTodo('');
-        }
-    };
-
-    const removeTodo = (index) => {
-        setTodos(todos.filter((_, i) => i !== index));
-    };
-
-    return (
-        <div className="todo-app">
-            <h1>Maëva's To-Do List</h1>
-            <input
-                type="text"
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-                placeholder="Voeg een taak toe"
-            />
-            <button onClick={addTodo}>Toevoegen</button>
-            <ul>
-                {todos.map((todo, index) => (
-                    <li key={index}>
-                        {todo} <button onClick={() => removeTodo(index)}>Verwijderen</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+const root = document.getElementById('root');
+if (root) {
+    ReactDOM.createRoot(root).render(
+        <React.StrictMode>
+            <App /> {/* Render de App component */}
+        </React.StrictMode>
     );
-};
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<TodoApp />);
+}
