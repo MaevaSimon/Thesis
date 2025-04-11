@@ -26,7 +26,7 @@ const TodoApp = () => {
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Voeg een taak toe"
             />
-            <button onClick={addTodo}>Toevoegen</button> GEWOON OM TE TESTEN !!
+            <button onClick={addTodo}>Toevoegen</button>
             <ul>
                 {todos.map((todo, index) => (
                     <li key={index}>
